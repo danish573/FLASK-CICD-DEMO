@@ -3,13 +3,13 @@ pipeline{
 
     environment {
         IMAGE= "dkhan573/flask-cicd-demo"
-        EC2_HOST= }
+        EC2_HOST= "54.163.212.39" }
 
 stages{
     stage('checkout'){
         steps{
             git branch: 'master'
-            url: 'https://github.com/YOUR_USERNAME/flask-cicd-demo.git'
+            url: 'https://github.com/danish573/Flask-cicd-demo.git'
         }
     }
     stage('Build Docker Image'){
