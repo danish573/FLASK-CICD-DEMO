@@ -14,7 +14,7 @@ stages{
     stage('Build Docker Image'){
         steps{
             script{
-                sh "docker build -t ${IMAGE}:${BUILD_NUMBER}"
+                sh "docker build -t ${IMAGE}:${BUILD_NUMBER} ."
                 sh "docker tag ${IMAGE}:${BUILD_NUMBER} ${IMAGE}:latest"
             }
         }
@@ -53,6 +53,7 @@ post{
     }
 
 }
+
 
 
 
