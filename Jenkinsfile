@@ -3,7 +3,7 @@ pipeline{
 
     environment {
         IMAGE= "dkhan573/flask-cicd-demo"
-        EC2_HOST= "54.163.212.39" }
+        EC2_HOST= "54.91.136.184" }
 
 stages{
     stage('checkout'){
@@ -54,5 +54,6 @@ post{
     }
 
 }
+
 
 
