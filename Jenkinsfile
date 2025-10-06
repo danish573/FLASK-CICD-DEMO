@@ -19,31 +19,37 @@ stages{
             }
         }
     }
-    stage('Push to DockerHub'){
-        steps{
-            withcredentials([usernamepassword(credentialsId:'dockerhub-creds',
-                                              usernamevariable:'DOCKER_USER',
-                                              passwordvariable: 'DOCKER_PASS')]){
-                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-            }
-            sh "docker push ${IMAGE}:${BUILD_NUMBER}"
-            sh "docker push ${IMAGE}:latest"
+  stage('Push to DockerHub') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh """
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                docker push ${IMAGE}:${BUILD_NUMBER}
+                docker push ${IMAGE}:latest
+            """
         }
     }
-    stage('DEploy on EC2'){
-        steps{
-            sshagent (credentials: ['ec2-ssh-key']){
-                sh """
-                ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
-                        docker pull ${IMAGE}:${BUILD_NUMBER} &&
-                        docker stop flaskapp || true &&
-                        docker rm flaskapp || true &&
-                        docker run -d --name flaskapp -p 80:5000 ${IMAGE}:${BUILD_NUMBER}
-                    '
-                """
-            }
+}
+
+    stage('Deploy on EC2') {
+    steps {
+        sshagent (credentials: ['ec2-ssh-key']) {
+            sh """
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_HOST} '
+                docker pull ${IMAGE}:${BUILD_NUMBER} &&
+                docker stop flaskapp || true &&
+                docker rm flaskapp || true &&
+                docker run -d --name flaskapp -p 80:5000 ${IMAGE}:${BUILD_NUMBER}
+            '
+            """
         }
     }
+}
+
 }
 
 post{
@@ -53,6 +59,7 @@ post{
     }
 
 }
+
 
 
 
