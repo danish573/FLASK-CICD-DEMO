@@ -3,8 +3,7 @@ app = Flask(__name__)
 @app.route("/")
 
 def index():
-    return "Hello DevOPs, 
-            If you see me, you had successfully deploy app to port 80"
+    return "Hello DevOPs,  If you see me, you had successfully deploy app to port 80"
 
 @app.route("/healthz")
 def healthz():
@@ -13,3 +12,4 @@ def healthz():
 if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=5000, debug=False)
+
